@@ -5,6 +5,7 @@ import { connectDB } from './src/config/db.js';
 import categoryRoutes from './src/routes/categoryRoutes.js'
 import commentRoutes from './src/routes/commentRoutes.js'
 import reviewRoutes from './src/routes/reviewRoutes.js'
+import serviceRoutes from './src/routes/serviceRoutes.js'
 
 const app = express();
 connectDB();
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/api/categories', categoryRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/services', serviceRoutes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Repairing Center API!');
