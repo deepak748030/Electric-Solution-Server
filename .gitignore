@@ -1,0 +1,55 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment Variables
+.env
+
+# Logs
+logs/
+*.log
+
+# Build Output
+dist/
+build/
+
+# Uploads
+uploads/
+
+# IDE and Editor Settings
+.vscode/
+.idea/
+.DS_Store
+
+# Misc
+coverage/
+.tmp/
+*.bak
+
+# Debug
+*.swp
+*.swo
+
+# MongoDB
+*.seed.js
+
+# Ignore local database files
+dump/
+
+# Ignore all test coverage reports
+coverage/
+
+# Ignore sensitive files
+*.pem
+*.pfx
+*.crt
+*.key
+
+# Ignore npm & yarn cache
+.npm/
+.yarn/
+
+# Ignore other system files
+Thumbs.db
+Desktop.ini
