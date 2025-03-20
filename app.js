@@ -3,6 +3,8 @@ import cors from 'cors';
 import { PORT } from './src/config/env.js';
 import { connectDB } from './src/config/db.js';
 import categoryRoutes from './src/routes/categoryRoutes.js'
+import commentRoutes from './src/routes/commentRoutes.js'
+import reviewRoutes from './src/routes/reviewRoutes.js'
 
 const app = express();
 connectDB();
@@ -11,6 +13,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/categories', categoryRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Repairing Center API!');
