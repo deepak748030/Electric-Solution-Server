@@ -9,12 +9,12 @@ const serviceSchema = new mongoose.Schema(
             trim: true
         },
         price: {
-            type: Number,
+            type: String,
             required: [true, 'Price is required']
         },
         image: {
             type: String,
-            required: [true, 'Image is required']
+            // required: [true, 'Image is required']
         },
         category: {
             type: String,
@@ -26,7 +26,7 @@ const serviceSchema = new mongoose.Schema(
         },
         providerImage: {
             type: String,
-            required: [true, 'Provider image is required']
+            // required: [true, 'Provider image is required']
         },
         rating: {
             type: Number,

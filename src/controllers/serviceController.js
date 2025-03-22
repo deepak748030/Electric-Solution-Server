@@ -4,29 +4,42 @@ import Service from '../models/serviceModel.js';
 export const createService = async (req, res) => {
     try {
         const { title, price, category, providerName, type } = req.body;
-        if (!title || !price || !category || !providerName || !type || !req.files) {
+        if (!title || !price || !category || !providerName || !type) {
             return res.status(400).json({ success: false, message: 'Please fill all required fields and upload images' });
         }
 
-        const image = `/uploads/${req.files.image[0].filename}`;
-        const providerImage = `/uploads/${req.files.providerImage[0].filename}`;
+        // Set empty values if no images are uploaded
+        const image = req.files?.image?.[0]?.filename ? `/uploads/${req.files.image[0].filename}` : '';
+        const providerImage = req.files?.providerImage?.[0]?.filename ? `/uploads/${req.files.providerImage[0].filename}` : '';
 
-        const service = await Service.create({ title, price: Number(price), image, category, providerName, providerImage, type });
+        const service = await Service.create({ title, price: price, image, category, providerName, providerImage, type });
         res.status(201).json({ success: true, message: 'Service created successfully', service });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 };
 
-// ✅ Get All Services
+
 export const getAllServices = async (req, res) => {
     try {
-        const services = await Service.find().sort({ createdAt: -1 });
+        const { type, limit } = req.query;
+
+        const filter = type ? { type } : {};
+        const query = Service.find(filter).sort({ createdAt: -1 });
+
+        // Apply limit if provided and is a valid number
+        if (limit && !isNaN(limit)) {
+            query.limit(Number(limit));
+        }
+
+        const services = await query;
         res.status(200).json({ success: true, services });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+
 
 // ✅ Get Service by ID
 export const getServiceById = async (req, res) => {
