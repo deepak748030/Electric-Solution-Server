@@ -1,5 +1,5 @@
 import Comment from '../models/commentModel.js';
-
+import { IMAGE_UPLOAD_URL } from '../config/env.js';
 // ✅ Create Comment
 export const createComment = async (req, res) => {
     try {
@@ -8,7 +8,7 @@ export const createComment = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Please fill all required fields and upload an image' });
         }
 
-        const image = `/uploads/${req.file.filename}`;
+        const image = `${IMAGE_UPLOAD_URL}/uploads/${req.file.filename}`;
         const comment = await Comment.create({ title, image, author });
         res.status(201).json({ success: true, message: 'Comment created successfully', comment });
     } catch (error) {
@@ -44,7 +44,7 @@ export const updateComment = async (req, res) => {
         const { id } = req.params;
         const updateData = req.body;
         if (req.file) {
-            updateData.image = `/uploads/${req.file.filename}`;
+            updateData.image = `${IMAGE_UPLOAD_URL}/uploads/${req.file.filename}`;
         }
 
         const comment = await Comment.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });

@@ -1,5 +1,5 @@
 import Review from '../models/reviewModel.js';
-
+import { IMAGE_UPLOAD_URL } from '../config/env.js';
 // ✅ Create Review
 export const createReview = async (req, res) => {
     try {
@@ -8,7 +8,7 @@ export const createReview = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Please fill all required fields and upload an image' });
         }
 
-        const authorImage = `/uploads/${req.file.filename}`;
+        const authorImage = `${IMAGE_UPLOAD_URL}/uploads/${req.file.filename}`;
         const review = await Review.create({ content, authorName, authorImage, authorTitle });
         res.status(201).json({ success: true, message: 'Review created successfully', review });
     } catch (error) {
@@ -44,7 +44,7 @@ export const updateReview = async (req, res) => {
         const { id } = req.params;
         const updateData = req.body;
         if (req.file) {
-            updateData.authorImage = `/uploads/${req.file.filename}`;
+            updateData.authorImage = `${IMAGE_UPLOAD_URL}/uploads/${req.file.filename}`;
         }
 
         const review = await Review.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });

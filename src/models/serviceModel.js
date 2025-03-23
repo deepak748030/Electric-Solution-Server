@@ -13,8 +13,7 @@ const serviceSchema = new mongoose.Schema(
             required: [true, 'Price is required']
         },
         image: {
-            type: String,
-            // required: [true, 'Image is required']
+            type: String
         },
         category: {
             type: String,
@@ -25,8 +24,7 @@ const serviceSchema = new mongoose.Schema(
             required: [true, 'Provider name is required']
         },
         providerImage: {
-            type: String,
-            // required: [true, 'Provider image is required']
+            type: String
         },
         rating: {
             type: Number,
@@ -40,9 +38,17 @@ const serviceSchema = new mongoose.Schema(
             type: String,
             enum: ['popular', 'featured'],
             required: [true, 'Type is required']
+        },
+        locations: {
+            type: [String], // Array of strings for multiple locations
+            required: [true, 'At least one location is required']
         }
     },
-    { timestamps: true }
+    {
+        timestamps: true,
+        versionKey: false // Disable version key (__v)
+    }
+
 );
 
 const Service = mongoose.model('Service', serviceSchema);

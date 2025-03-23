@@ -1,10 +1,10 @@
 import Category from '../models/categoryModel.js';
-
+import { IMAGE_UPLOAD_URL } from '../config/env.js';
 // ✅ Create a Category with Image Upload
 export const createCategory = async (req, res) => {
     try {
         const { title, servicesCount } = req.body;
-        const image = req.file ? `/uploads/${req.file.filename}` : null;
+        const image = req.file ? `${IMAGE_UPLOAD_URL}/uploads/${req.file.filename}` : null;
 
         // Validate required fields
         if (!title || !servicesCount) {
@@ -67,7 +67,7 @@ export const updateCategory = async (req, res) => {
         const updateData = { ...req.body };
 
         if (req.file) {
-            updateData.image = `/uploads/${req.file.filename}`;
+            updateData.image = `${IMAGE_UPLOAD_URL}/uploads/${req.file.filename}`;
         }
 
         if (updateData.servicesCount) {

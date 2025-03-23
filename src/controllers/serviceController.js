@@ -1,24 +1,27 @@
 import Service from '../models/serviceModel.js';
+import { IMAGE_UPLOAD_URL } from '../config/env.js';
 
 // ✅ Create Service
 export const createService = async (req, res) => {
     try {
-        const { title, price, category, providerName, type } = req.body;
-        if (!title || !price || !category || !providerName || !type) {
+        console.log(req.body);
+        const { title, price, category, providerName, type, locations } = req.body;
+        if (!title || !price || !category || !providerName || !type || !locations) {
             return res.status(400).json({ success: false, message: 'Please fill all required fields and upload images' });
         }
 
         // Set empty values if no images are uploaded
-        const image = req.files?.image?.[0]?.filename ? `/uploads/${req.files.image[0].filename}` : '';
-        const providerImage = req.files?.providerImage?.[0]?.filename ? `/uploads/${req.files.providerImage[0].filename}` : '';
+        const image = req.files?.image?.[0]?.filename ? `${IMAGE_UPLOAD_URL}/uploads/${req.files.image[0].filename}` : '';
+        const providerImage = req.files?.providerImage?.[0]?.filename ? `${IMAGE_UPLOAD_URL}/uploads/${req.files.providerImage[0].filename}` : '';
 
-        const service = await Service.create({ title, price: price, image, category, providerName, providerImage, type });
+        const parsedLocations = Array.isArray(locations) ? locations : JSON.parse(locations);
+
+        const service = await Service.create({ title, price, image, category, providerName, providerImage, type, locations: parsedLocations });
         res.status(201).json({ success: true, message: 'Service created successfully', service });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 };
-
 
 export const getAllServices = async (req, res) => {
     try {
@@ -39,8 +42,6 @@ export const getAllServices = async (req, res) => {
     }
 };
 
-
-
 // ✅ Get Service by ID
 export const getServiceById = async (req, res) => {
     try {
@@ -58,14 +59,19 @@ export const updateService = async (req, res) => {
     try {
         const { id } = req.params;
         const updateData = req.body;
+        console.log(req.body);
 
         if (updateData.price) {
             updateData.price = Number(updateData.price);
         }
 
         if (req.files) {
-            if (req.files.image) updateData.image = `/uploads/${req.files.image[0].filename}`;
-            if (req.files.providerImage) updateData.providerImage = `/uploads/${req.files.providerImage[0].filename}`;
+            if (req.files.image) updateData.image = `${IMAGE_UPLOAD_URL}/uploads/${req.files.image[0].filename}`;
+            if (req.files.providerImage) updateData.providerImage = `${IMAGE_UPLOAD_URL}/uploads/${req.files.providerImage[0].filename}`;
+        }
+
+        if (updateData.locations) {
+            updateData.locations = Array.isArray(updateData.locations) ? updateData.locations : JSON.parse(updateData.locations);
         }
 
         const service = await Service.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
