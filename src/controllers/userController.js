@@ -98,3 +98,75 @@ export const loginUser = async (req, res) => {
     }
 };
 
+
+// ✅ Get User by ID
+export const getUserById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await User.findById(id);
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+        res.status(200).json({ success: true, user });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// ✅ Update User (PATCH)
+export const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updateData = req.body;
+
+        // Prevent updating email and password directly for security reasons
+        if (updateData.email || updateData.password) {
+            return res.status(400).json({ success: false, message: 'Cannot update email or password using this endpoint' });
+        }
+
+        const user = await User.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+        res.status(200).json({ success: true, message: 'User updated successfully', user });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// ✅ Get All Users
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find(); // Use "users" instead of "user" for multiple records
+        if (users.length === 0) {
+            return res.status(404).json({ success: false, message: 'No users found' });
+        }
+        res.status(200).json({ success: true, users });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+export const updateUserProfile = async (req, res) => {
+    const { id } = req.params;
+    const { address, phone, email } = req.body;
+
+    try {
+        // Validate input
+        if (!address && !phone && !email) {
+            return res.status(400).json({ message: 'Provide at least one field to update' });
+        }
+
+        // Find and update user
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { $set: { ...(address && { address }), ...(phone && { phone }), ...(email && { email }) } },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({ message: 'User updated successfully', updatedUser });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating user', error: error.message });
+    }
+};

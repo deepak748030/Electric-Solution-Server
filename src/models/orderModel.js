@@ -1,4 +1,3 @@
-// models/orderModel.js
 import mongoose from 'mongoose';
 
 const orderSchema = new mongoose.Schema(
@@ -7,6 +6,11 @@ const orderSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true
+        },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
         },
         customer: {
             type: String,
