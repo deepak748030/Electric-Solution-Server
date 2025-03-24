@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import sgMail from '@sendgrid/mail';
 import { JWT_SECRET } from '../config/env.js';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY || "wefergrgrtg");
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY || "wefergrgrtg");
 const otpStore = {};
 
 // ✅ Send OTP for verification
