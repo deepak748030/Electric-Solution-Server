@@ -1,77 +1,100 @@
 import User from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
-import sgMail from '@sendgrid/mail';
-import { JWT_SECRET } from '../config/env.js';
+import axios from 'axios';
 
-// sgMail.setApiKey(process.env.SENDGRID_API_KEY || "wefergrgrtg");
 const otpStore = {};
 
 // ✅ Send OTP for verification
 export const sendOtp = async (req, res) => {
     try {
-        const { email } = req.body;
-        if (!email) {
-            return res.status(400).json({ success: false, message: 'Email is required' });
+        const { mobile } = req.body;
+        if (!mobile || mobile.length !== 10) {
+            return res.status(400).json({ success: false, message: 'Valid mobile number is required' });
         }
 
         const otp = Math.floor(100000 + Math.random() * 900000);
-        otpStore[email] = { otp, expiresAt: Date.now() + 10 * 60 * 1000 };
+        otpStore[mobile] = { otp, expiresAt: Date.now() + 10 * 60 * 1000 };
 
-        const msg = {
-            to: email,
-            from: 'your-email@example.com',
-            subject: 'Your OTP Code',
-            text: `Your OTP code is ${otp}. It is valid for 10 minutes.`
+        const data = {
+            otp,
+            type: 'SMS',
+            numberOrMail: mobile,
         };
 
-        await sgMail.send(msg);
-        res.status(200).json({ success: true, message: 'OTP sent successfully' });
+        const apiKey = process.env.OTP_API_KEY; // Replace with your actual API key;
+        const apiSalt = process.env.OTP_SALT; // Replace with your actual API salt;
+        console.log(apiKey, apiSalt, data)
+        const response = await axios.post('https://api.codemindstudio.com/api/start_verification', data, {
+            headers: {
+                'api-key': apiKey,
+                'api-salt': apiSalt,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        });
+        console.log(response.data)
+        res.status(200).json({ success: response.data.status, message: 'OTP sent successfully' });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 };
 
-// ✅ Verify OTP and Create User
-export const createUser = async (req, res) => {
+// ✅ Verify OTP
+export const verifyOtp = async (req, res) => {
     try {
-        const { name, email, password, otp } = req.body;
+        const { mobile, otp } = req.body;
 
-        if (!name || !email || !password || !otp) {
-            return res.status(400).json({ success: false, message: 'All fields are required' });
+        if (!mobile || !otp) {
+            return res.status(400).json({ success: false, message: 'Mobile and OTP are required' });
         }
 
-        if (!otpStore[email] || otpStore[email].otp !== Number(otp) || otpStore[email].expiresAt < Date.now()) {
+        if (!otpStore[mobile] || otpStore[mobile].otp !== Number(otp) || otpStore[mobile].expiresAt < Date.now()) {
             return res.status(400).json({ success: false, message: 'Invalid or expired OTP' });
         }
 
-        delete otpStore[email];
+        delete otpStore[mobile];
 
-        const existingUser = await User.findOne({ email });
+        res.status(200).json({ success: true, message: 'OTP verified successfully' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// ✅ Create User
+export const createUser = async (req, res) => {
+    try {
+        const { name, mobile, password } = req.body;
+
+        if (!name || !mobile || !password) {
+            return res.status(400).json({ success: false, message: 'Name, Mobile, and Password are required' });
+        }
+
+        const existingUser = await User.findOne({ mobile });
         if (existingUser) {
-            return res.status(400).json({ success: false, message: 'Email already exists' });
+            return res.status(400).json({ success: false, message: 'Mobile number already exists' });
         }
 
         const userCount = await User.countDocuments();
         const role = userCount === 0 ? 'admin' : 'user';
 
-        const user = await User.create({ name, email, password, role });
+        const user = await User.create({ name, mobile, password, role });
         res.status(201).json({ success: true, message: 'User created successfully', user });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 };
 
+
 // ✅ Login
 export const loginUser = async (req, res) => {
     try {
         console.log(req.body);
-        const { email, password } = req.body;
+        const { mobile, password } = req.body;
 
-        if (!email || !password) {
-            return res.status(400).json({ success: false, message: 'All fields are required' });
+        if (!mobile || !password) {
+            return res.status(400).json({ success: false, message: 'Mobile number and password are required' });
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ mobile });
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
@@ -89,8 +112,9 @@ export const loginUser = async (req, res) => {
             user: {
                 _id: user._id,
                 name: user.name,
-                email: user.email,
-                role: user.role
+                mobile: user.mobile,
+                role: user.role,
+                address: user.address,
             }
         });
     } catch (error) {

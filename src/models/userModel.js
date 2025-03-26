@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema(
         },
         email: {
             type: String,
-            required: [true, 'Email is required'],
             trim: true,
             unique: true,
             lowercase: true,
@@ -25,6 +24,10 @@ const userSchema = new mongoose.Schema(
             type: String,
             enum: ['user', 'admin'],
             default: 'user'
+        },
+        mobile: {
+            type: Number,
+            required: [true, 'Mobile number is required'],
         },
         address: {
             type: String,

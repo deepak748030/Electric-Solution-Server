@@ -11,7 +11,7 @@ const categorySchema = new mongoose.Schema(
         },
         image: {
             type: String,
-            trim: true,
+            // trim: true,
         },
         servicesCount: {
             type: String,

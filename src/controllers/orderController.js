@@ -5,7 +5,7 @@ export const createOrder = async (req, res) => {
     try {
         const { userId, customer, email, phone, service, price, date, status, address } = req.body;
 
-        if (!userId || !customer || !email || !phone || !service || !price || !date || !status || !address) {
+        if (!userId || !customer || !phone || !service || !price || !date || !status || !address) {
             return res.status(400).json({ success: false, message: 'All fields are required' });
         }
 
@@ -13,7 +13,7 @@ export const createOrder = async (req, res) => {
         const orderCount = await Order.countDocuments();
         const orderId = `ORD-${String(orderCount + 1).padStart(2, '0')}`;
 
-        const newOrder = new Order({ orderId, userId, customer, email, phone, service, price, date, status, address });
+        const newOrder = new Order({ orderId, userId, customer, phone, service, price, date, status, address });
         await newOrder.save();
 
         res.status(201).json({ success: true, message: 'Order created successfully', order: newOrder });

@@ -4,17 +4,12 @@ import { IMAGE_UPLOAD_URL } from '../config/env.js';
 export const createCategory = async (req, res) => {
     try {
         const { title, servicesCount } = req.body;
+        console.log(title, servicesCount);
         const image = req.file ? `${IMAGE_UPLOAD_URL}/uploads/${req.file.filename}` : null;
 
         // Validate required fields
         if (!title || !servicesCount) {
             return res.status(400).json({ success: false, message: 'Title, image, and services count are required.' });
-        }
-
-        // Validate servicesCount format
-        const servicesCountPattern = /^[0-9]+(\+)?\s?Services$/;
-        if (!servicesCountPattern.test(servicesCount)) {
-            return res.status(400).json({ success: false, message: 'Invalid services count. Example: "1+ Services"' });
         }
 
         // Save to Database
@@ -24,8 +19,10 @@ export const createCategory = async (req, res) => {
         res.status(201).json({ success: true, message: 'Category created successfully', category });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
+        console.log(error);
     }
 };
+
 
 // ✅ Get All Categories
 export const getAllCategories = async (req, res) => {

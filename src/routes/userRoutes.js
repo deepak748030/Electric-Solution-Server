@@ -1,5 +1,5 @@
 import express from 'express';
-import { sendOtp, createUser, loginUser, getUserById, updateUser, getAllUsers, updateUserProfile } from '../controllers/userController.js';
+import { sendOtp, createUser, loginUser, getUserById, updateUser, getAllUsers, updateUserProfile, verifyOtp } from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -11,6 +11,9 @@ router.post('/register', createUser);
 
 // Login Route
 router.post('/login', loginUser);
+
+// Login Route
+router.post('/verify-otp', verifyOtp);
 
 // Get User by ID Route
 router.get('/:id', getUserById);
