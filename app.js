@@ -8,6 +8,7 @@ import reviewRoutes from './src/routes/reviewRoutes.js';
 import serviceRoutes from './src/routes/serviceRoutes.js';
 import userRoutes from './src/routes/userRoutes.js';
 import orderRoutes from './src/routes/orderRoutes.js'
+import paymentRoutes from './src/routes/paymentRoutes.js';
 const app = express();
 connectDB();
 app.use(cors());
@@ -23,6 +24,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/payments', paymentRoutes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Repairing Center API!');

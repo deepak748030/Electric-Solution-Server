@@ -174,7 +174,7 @@ export const updateUserProfile = async (req, res) => {
 
     try {
         // Validate input
-        if (!address && !phone && !email) {
+        if (!address && !phone) {
             return res.status(400).json({ message: 'Provide at least one field to update' });
         }
 

@@ -45,7 +45,13 @@ const orderSchema = new mongoose.Schema(
         address: {
             type: String,
             required: true
-        }
+        },
+        paymentMethod: {
+            type: String,
+            enum: ['Pay Online', 'COD'],
+            required: true,
+            default: 'COD'
+        },
     },
     {
         timestamps: true,
