@@ -1,17 +1,17 @@
 
-# ⚡ Electric Solution Server – Backend API
+# ⚡ Electric-Solution-Server (Repair Guru Backend)
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
   <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" />
-  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" />
-  <img src="https://img.shields.io/badge/Multer-FCA121?style=for-the-badge&logo=upload&logoColor=white" />
-  <img src="https://img.shields.io/badge/SendGrid-00B2FF?style=for-the-badge&logo=sendgrid&logoColor=white" />
+  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Multer-FF0000?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens" />
 </div>
 
 <div align="center">
-  <h3>🔧 Backend API for Managing Appliance Repair Services, Built for Speed, Scalability & Simplicity</h3>
-  <p><strong>GitHub Repo:</strong> <a href="https://github.com/deepak748030/Electric-Solution-Server.git">Electric-Solution-Server</a></p>
+  <h3>🔧 Powerful & Scalable Backend for Home Appliance Repair Services</h3>
+  <p><strong>Repository:</strong> <a href="https://github.com/deepak748030/Electric-Solution-Server">Electric-Solution-Server</a></p>
 </div>
 
 ---
@@ -19,10 +19,11 @@
 ## 📖 Table of Contents
 
 * [🚀 Features](#-features)
-* [🛠 Tech Stack](#-tech-stack)
-* [⚙️ Installation](#️-installation)
+* [🧰 Tech Stack](#-tech-stack)
+* [📦 Installation](#-installation)
 * [📡 API Endpoints](#-api-endpoints)
 * [📁 Folder Structure](#-folder-structure)
+* [🔐 Environment Variables](#-environment-variables)
 * [🤝 Contributing](#-contributing)
 * [📄 License](#-license)
 * [👨‍💻 Author](#-author)
@@ -31,69 +32,62 @@
 
 ## 🚀 Features
 
-* ✅ Full **CRUD** functionality for Categories, Services, Reviews, and Comments
-* ✅ **Image Uploads** powered by Multer
-* ✅ **MongoDB** with Mongoose for flexible schema and validation
-* ✅ **Secure APIs** with JWT Authentication
-* ✅ **Razorpay Integration** for payments
-* ✅ Robust **Error Handling** for smooth operations
-* ✅ **Environment Configurations** via `.env`
-* ✅ Clean and Scalable Folder Architecture
+* ✅ **CRUD APIs** for Categories, Services, Reviews, and Comments
+* ✅ **Image Upload** with Multer
+* ✅ **JWT Authentication** for secure endpoints
+* ✅ **Mongoose Validation** for schema-level integrity
+* ✅ **RESTful Architecture**
+* ✅ **Razorpay Integration** for Payments
+* ✅ **OTP Verification** with Secure API Key & Salt
+* ✅ **Centralized Error Handling**
 
 ---
 
-## 🛠 Tech Stack
+## 🧰 Tech Stack
 
-| Technology | Description                     |
-| ---------- | ------------------------------- |
-| Node.js    | JavaScript runtime              |
-| Express.js | Web framework for Node.js       |
-| MongoDB    | NoSQL database                  |
-| Mongoose   | MongoDB ODM                     |
-| Multer     | Image/file upload middleware    |
-| JWT        | Authentication                  |
-| SendGrid   | Email service                   |
-| Razorpay   | Payment gateway                 |
-| Dotenv     | Environment variable management |
+| Category        | Tech Used                        |
+| --------------- | -------------------------------- |
+| Backend Runtime | Node.js                          |
+| Framework       | Express.js                       |
+| Database        | MongoDB with Mongoose ORM        |
+| Authentication  | JSON Web Tokens (JWT)            |
+| File Upload     | Multer                           |
+| Payments        | Razorpay API                     |
+| Mail Services   | SendGrid                         |
+| OTP Services    | External API (via OTP\_API\_KEY) |
+| Env Management  | dotenv                           |
 
 ---
 
-## ⚙️ Installation
+## 📦 Installation
 
-### 📦 Prerequisites
-
-* Node.js ≥ 16.x
-* MongoDB instance or Atlas URI
-* npm (or yarn)
-
-### 🔧 Setup
+### 1. Clone the repository
 
 ```bash
-# Clone the repository
 git clone https://github.com/deepak748030/Electric-Solution-Server.git
 cd Electric-Solution-Server
-
-# Install dependencies
-npm install
-
-# Setup environment variables
-touch .env
 ```
 
-Add the following to your `.env` file:
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Create `.env` file in the root directory
 
 ```env
 PORT=3000
-MONGO_URI=mongodb+srv://deepakkushwah748930:Deepak900@cluster0.0ykgp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+MONGO_URI=
 JWT_SECRET=your-secret-key
 IMAGE_UPLOAD_URL=http://localhost:3000
-OTP_API_KEY=d1d0b51fc1263df73270ffb35da32b59
-OTP_SALT=91a80781ff475d111f08a19864b5e8ce2e39b629c06d7de7faf3f3e5cca678fd
-RAZORPAY_KEY_ID=jjadhewhdi32238r4rh4294jr442904
-RAZORPAY_KEY_SECRET=ew935tjjt4g953tj53059t5t9t09t959945t905j
+OTP_API_KEY=
+OTP_SALT=
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
 ```
 
-### 🚀 Start the Server
+### 4. Run the development server
 
 ```bash
 npm run dev
@@ -103,37 +97,37 @@ npm run dev
 
 ## 📡 API Endpoints
 
-### 🔖 Categories
+### 🔷 Categories
 
-* `POST /api/categories` – Add new category
-* `GET /api/categories` – Fetch all categories
-* `GET /api/categories/:id` – Fetch category by ID
-* `PATCH /api/categories/:id` – Update category
-* `DELETE /api/categories/:id` – Remove category
+* `POST /api/categories` – Create a new category
+* `GET /api/categories` – Get all categories
+* `GET /api/categories/:id` – Get a category by ID
+* `PATCH /api/categories/:id` – Update a category
+* `DELETE /api/categories/:id` – Delete a category
 
-### 🛠 Services
+### 🔷 Services (with Image Upload)
 
-* `POST /api/services` – Create service (supports image upload)
-* `GET /api/services` – Fetch all services
-* `GET /api/services/:id` – Fetch service by ID
-* `PATCH /api/services/:id` – Update service
-* `DELETE /api/services/:id` – Remove service
+* `POST /api/services` – Create a new service
+* `GET /api/services` – Get all services
+* `GET /api/services/:id` – Get a service by ID
+* `PATCH /api/services/:id` – Update a service
+* `DELETE /api/services/:id` – Delete a service
 
-### ⭐ Reviews
+### 🔷 Reviews
 
-* `POST /api/reviews` – Add a review
+* `POST /api/reviews` – Create a new review
 * `GET /api/reviews` – Get all reviews
-* `GET /api/reviews/:id` – Get review by ID
-* `PATCH /api/reviews/:id` – Edit review
-* `DELETE /api/reviews/:id` – Delete review
+* `GET /api/reviews/:id` – Get a review by ID
+* `PATCH /api/reviews/:id` – Update a review
+* `DELETE /api/reviews/:id` – Delete a review
 
-### 💬 Comments
+### 🔷 Comments
 
-* `POST /api/comments` – Add comment
-* `GET /api/comments` – Fetch all comments
-* `GET /api/comments/:id` – Fetch comment by ID
-* `PATCH /api/comments/:id` – Update comment
-* `DELETE /api/comments/:id` – Remove comment
+* `POST /api/comments` – Create a new comment
+* `GET /api/comments` – Get all comments
+* `GET /api/comments/:id` – Get a comment by ID
+* `PATCH /api/comments/:id` – Update a comment
+* `DELETE /api/comments/:id` – Delete a comment
 
 ---
 
@@ -142,40 +136,57 @@ npm run dev
 ```bash
 Electric-Solution-Server/
 ├── public/
-│   └── uploads/               # Image storage
+│   └── uploads/              # Uploaded images
 ├── src/
-│   ├── config/                # DB and environment config
-│   │   ├── db.js
-│   │   └── env.js
-│   ├── controllers/           # Business logic
-│   ├── models/                # Mongoose schemas
-│   ├── routes/                # API route definitions
-│   └── app.js                 # Express app entry
-├── .env                       # Environment variables
-├── package.json
+│   ├── config/
+│   │   ├── db.js             # MongoDB connection
+│   │   └── env.js            # Environment loader
+│   ├── controllers/          # Route handlers
+│   ├── models/               # Mongoose schemas
+│   ├── routes/               # Express routes
+│   ├── app.js                # Main Express app
+├── .env                      # Environment variables
+└── package.json              # Project metadata & dependencies
 ```
+
+---
+
+## 🔐 Environment Variables
+
+| Key                   | Description                |
+| --------------------- | -------------------------- |
+| `PORT`                | Server port                |
+| `MONGO_URI`           | MongoDB connection string  |
+| `JWT_SECRET`          | Secret key for JWT auth    |
+| `IMAGE_UPLOAD_URL`    | Base URL for image uploads |
+| `OTP_API_KEY`         | OTP service API key        |
+| `OTP_SALT`            | Salt for OTP generation    |
+| `RAZORPAY_KEY_ID`     | Razorpay public key        |
+| `RAZORPAY_KEY_SECRET` | Razorpay private key       |
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! To contribute:
+We welcome all contributions! Please:
 
-1. Fork the repo
-2. Create your feature branch (`git checkout -b feature/featureName`)
-3. Commit your changes (`git commit -m 'Add some feature'`)
-4. Push to the branch (`git push origin feature/featureName`)
-5. Create a new Pull Request
+1. Fork this repo
+2. Create a new branch (`git checkout -b feature-branch`)
+3. Make your changes
+4. Commit and push (`git commit -am 'add new feature' && git push`)
+5. Open a pull request 🙌
 
 ---
 
 ## 📄 License
 
-Licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 👨‍💻 Author
 
-Made with ❤️ by **[Deepak Kushwah](https://github.com/deepak748030)**
-[🔗 GitHub Repository](https://github.com/deepak748030/Electric-Solution-Server.git)
+**Deepak Kushwah**
+🔗 [GitHub](https://github.com/deepak748030)
+🛠️ Passionate MERN Stack Developer
+❤️ Building scalable backend solutions
